@@ -11,8 +11,11 @@
 # 9. the game ends when all six spaces on one side of the Mancala board are empty
 # 10. the player who still has pieces on his side of the board when the game ends capture all of those pieces
 
-num_holes = 12
+# configurable settings --------------------------
+num_holes_pp = 6
 start_num_pieces = 4
+# ------------------------------------------------
+num_holes = num_holes_pp * 2
 
 
 def print_board(board):
@@ -49,7 +52,7 @@ def check_valid_move(player, hole_num, board):
 
 def convert_to_index(num):
     # numbers 1,2,3,4,5,6 / 7,8,9,10,11,12 to 1,2,3,4,5,6 / 8,9,10,11,12,13
-    return (num + 1 if num > 6 else num) % (num_holes + 2)
+    return (num + 1 if num > num_holes_pp else num) % (num_holes + 2)
 
 
 def prompt_new_move(player, board):
@@ -76,7 +79,7 @@ def make_move(player, hole_num, board):
                 mov_index %= num_holes + 2
             board[mov_index] += 1
         board[curr_hole] = 0
-        if not game_isover(board):
+        if not is_game_over(board):
             check_special_moves(player, mov_index, board)
         return
     else:
@@ -97,7 +100,7 @@ def check_special_moves(player, curr_index, board):
         return
 
 
-def game_isover(board):
+def is_game_over(board):
     status_1 = True
     status_2 = True
 
@@ -133,7 +136,7 @@ def main():
     print("New Mancala Game! Player 1 please make your move!")
     curr_player = 1
 
-    while not game_isover(this_board):
+    while not is_game_over(this_board):
         prompt_new_move(curr_player, this_board)
         print_board(this_board)
         curr_player = 2 if curr_player == 1 else 1
